@@ -2,7 +2,7 @@ import torch
 from torch.utils.cpp_extension import load
 import timeit
 
-VARIANTS = 5
+VARIANTS = 6
 NUM_BENCH = 5
 
 my_ext = load(name="my_ext", 
