@@ -14,6 +14,7 @@
             a.size(1)
 
 void matmul0(SIG);
+void matmul1(SIG);
 
 // CUDA implementation
 void matmul(
@@ -27,6 +28,9 @@ void matmul(
     {
         case 0:
             matmul0(CALL);
+            break;
+        case 1:
+            matmul1(CALL);
             break;
     
     }
