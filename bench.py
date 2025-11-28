@@ -1,5 +1,6 @@
 import torch
 from torch.utils.cpp_extension import load
+import timeit
 
 M, N, K = (512, 256, 1024)
 
@@ -17,3 +18,9 @@ if __name__ == "__main__":
     my_ext.matmul(a, b, c, 0)
 
     assert torch.allclose(c, out)
+
+
+    torch_time = timeit.timeit(lambda: a@b, number=10)
+    matmul_time = timeit.timeit(lambda: my_ext.matmul(a, b, c, 0), number=10)
+    print(f"{torch_time=}, {matmul_time=}, performance = {(torch_time/matmul_time)*100:.2f}%")
+
