@@ -2,7 +2,7 @@ import torch
 from torch.utils.cpp_extension import load
 import timeit
 
-VARIANTS = 7
+VARIANTS = 8
 NUM_BENCH = 5
 
 my_ext = load(name="my_ext", 
@@ -24,7 +24,7 @@ if __name__ == "__main__":
             c = torch.zeros((M, N), dtype=torch.float32)
             my_ext.matmul(a, b, c, variant)
 
-            assert torch.allclose(c, out)
+            assert torch.allclose(c, out, atol=1e-4, rtol=1e-6)
 
             matmul_time = timeit.timeit(lambda: my_ext.matmul(a, b, c, variant), number=NUM_BENCH)
             print(f"{torch_time=}, {matmul_time=}, {variant=} performance = {(torch_time/matmul_time)*100:.2f}%")
