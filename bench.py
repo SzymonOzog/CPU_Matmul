@@ -7,7 +7,8 @@ NUM_BENCH = 5
 
 my_ext = load(name="my_ext", 
               sources = ["./csrc/torch_interface.cpp"] +
-                        [f"./csrc/matmul{i}.cpp" for i in range(VARIANTS)]
+              [f"./csrc/matmul{i}.cpp" for i in range(VARIANTS)],
+              extra_cflags=["-O3"],
               )
 
 if __name__ == "__main__":
