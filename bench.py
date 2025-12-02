@@ -9,6 +9,7 @@ my_ext = load(name="my_ext",
               sources = ["./csrc/torch_interface.cpp"] +
               [f"./csrc/matmul{i}.cpp" for i in range(VARIANTS)],
               extra_cflags=["-O3"],
+              verbose=True
               )
 
 if __name__ == "__main__":
