@@ -1,15 +1,19 @@
 import torch
 from torch.utils.cpp_extension import load
 import timeit
+import os
 
-VARIANTS = 8
+VARIANTS = 9
 NUM_BENCH = 5
 
-my_ext = load(name="my_ext", 
+# Use PyTorch's OpenMP library to avoid conflicts
+torch_lib_path = os.path.join(os.path.dirname(torch.__file__), 'lib')
+
+my_ext = load(name="my_ext",
               sources = ["./csrc/torch_interface.cpp"] +
               [f"./csrc/matmul{i}.cpp" for i in range(VARIANTS)],
-              extra_cflags=["-O3"],
-              verbose=True
+              extra_cflags=["-O3", "-Xclang", "-fopenmp", f"-I{torch_lib_path}"],
+              extra_ldflags=[f"-L{torch_lib_path}", "-lomp"],
               )
 
 if __name__ == "__main__":
