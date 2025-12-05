@@ -14,6 +14,7 @@ my_ext = load(name="my_ext",
               [f"./csrc/matmul{i}.cpp" for i in range(VARIANTS)],
               extra_cflags=["-O3", "-Xclang", "-fopenmp", f"-I{torch_lib_path}"],
               extra_ldflags=[f"-L{torch_lib_path}", "-lomp"],
+              verbose=True
               )
 
 if __name__ == "__main__":
