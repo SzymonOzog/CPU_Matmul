@@ -25,7 +25,7 @@ if __name__ == "__main__":
         b = torch.randn((K, N), dtype=torch.float32)
 
         out = a@b
-        torch_time = timeit.timeit(lambda: a@b, number=NUM_BENCH)
+        torch_time = timeit.timeit(lambda: a@b, number=NUM_BENCH) / NUM_BENCH
         print("\nsize =", s)
         for variant in range(VARIANTS):
             c = torch.zeros((M, N), dtype=torch.float32)
@@ -33,5 +33,5 @@ if __name__ == "__main__":
 
             assert torch.allclose(c, out, atol=1e-4, rtol=1e-6)
 
-            matmul_time = timeit.timeit(lambda: my_ext.matmul(a, b, c, variant), number=NUM_BENCH)
+            matmul_time = timeit.timeit(lambda: my_ext.matmul(a, b, c, variant), number=NUM_BENCH) / NUM_BENCH
             print(f"{torch_time=}, {matmul_time=}, {variant=} performance = {(torch_time/matmul_time)*100:.2f}%")
