@@ -33,5 +33,6 @@ if __name__ == "__main__":
 
             assert torch.allclose(c, out, atol=1e-4, rtol=1e-6)
 
+            flops = 2*M*K*N
             matmul_time = timeit.timeit(lambda: my_ext.matmul(a, b, c, variant), number=NUM_BENCH) / NUM_BENCH
-            print(f"{torch_time=}, {matmul_time=}, {variant=} performance = {(torch_time/matmul_time)*100:.2f}%")
+            print(f"{torch_time=}({flops/(torch_time*1e9):.2f}GFLOP/s), {matmul_time=}({flops/(matmul_time*1e9):.2f}GFLOP/s), {variant=} performance = {(torch_time/matmul_time)*100:.2f}%")
