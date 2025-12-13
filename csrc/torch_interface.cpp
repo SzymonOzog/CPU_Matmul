@@ -22,6 +22,7 @@ void matmul5(SIG);
 void matmul6(SIG);
 void matmul7(SIG);
 void matmul8(SIG);
+void matmul9(SIG);
 
 // CUDA implementation
 void matmul(
@@ -59,6 +60,9 @@ void matmul(
             break;
         case 8:
             matmul8(CALL);
+            break;
+        case 9:
+            matmul9(CALL);
             break;
     
     }

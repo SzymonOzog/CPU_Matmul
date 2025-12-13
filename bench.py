@@ -3,8 +3,8 @@ from torch.utils.cpp_extension import load
 import timeit
 import os
 
-VARIANTS = 9
-NUM_BENCH = 5
+VARIANTS = 10
+NUM_BENCH = 15
 
 # Use PyTorch's OpenMP library to avoid conflicts
 torch_lib_path = os.path.join(os.path.dirname(torch.__file__), 'lib')
