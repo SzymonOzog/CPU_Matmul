@@ -64,31 +64,23 @@ namespace mm9 {
                 }
                 float32x4_t* c_vec = reinterpret_cast<float32x4_t*>(&c[(m+0)*SN + n+0]);
                 vst1q_f32(&c[(m+0)*SN + n+0], 
-                        vaddq_f32(*c_vec, 
-                            c_reg[0]
-                            )
+                        vaddq_f32(*c_vec, c_reg[0])
                         );
 
                 c_vec = reinterpret_cast<float32x4_t*>(&c[(m+1)*SN + n+0]);
                 vst1q_f32(&c[(m+1)*SN + n+0], 
-                        vaddq_f32(*c_vec, 
-                            c_reg[1]
-                            )
+                        vaddq_f32(*c_vec, c_reg[1])
                         );
 
                 c_vec = reinterpret_cast<float32x4_t*>(&c[(m+2)*SN + n+0]);
                 vst1q_f32(&c[(m+2)*SN + n+0], 
-                        vaddq_f32(*c_vec, 
-                            c_reg[2]
-                            )
+                        vaddq_f32(*c_vec, c_reg[2])
                         );
 
 
                 c_vec = reinterpret_cast<float32x4_t*>(&c[(m+3)*SN + n+0]);
                 vst1q_f32(&c[(m+3)*SN + n+0], 
-                        vaddq_f32(*c_vec, 
-                            c_reg[3]
-                            )
+                        vaddq_f32(*c_vec, c_reg[3])
                         );
             }
         }
