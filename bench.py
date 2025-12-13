@@ -31,6 +31,10 @@ if __name__ == "__main__":
             c = torch.zeros((M, N), dtype=torch.float32)
             my_ext.matmul(a, b, c, variant)
 
+            if not torch.allclose(c, out, atol=1e-4, rtol=1e-6):
+                print(c)
+                print(out)
+
             assert torch.allclose(c, out, atol=1e-4, rtol=1e-6)
 
             flops = 2*M*K*N
