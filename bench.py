@@ -2,6 +2,7 @@ import torch
 from torch.utils.cpp_extension import load
 import timeit
 import os
+import argparse
 
 VARIANTS = 10
 NUM_BENCH = 15
@@ -18,7 +19,15 @@ my_ext = load(name="my_ext",
               )
 
 if __name__ == "__main__":
-    sizes = [32, 128, 256, 512]
+    parser = argparse.ArgumentParser(description='MOE Benchmark Script')
+    parser.add_argument('--sizes',
+                        type=int,
+                        nargs='+',
+                        default=[32, 128, 256, 512],
+                        help='Batch sizes to benchmark')
+    args = parser.parse_args()
+    sizes = args.sizes
+
     for s in sizes:
         M, N, K = (s,s,s)
         a = torch.randn((M, K), dtype=torch.float32)
