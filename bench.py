@@ -4,7 +4,7 @@ import timeit
 import os
 import argparse
 
-VARIANTS = 12
+VARIANTS = 13
 NUM_BENCH = 15
 
 # Use PyTorch's OpenMP library to avoid conflicts

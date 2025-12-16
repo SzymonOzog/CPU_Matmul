@@ -25,6 +25,7 @@ void matmul8(SIG);
 void matmul9(SIG);
 void matmul10(SIG);
 void matmul11(SIG);
+void matmul12(SIG);
 
 // CUDA implementation
 void matmul(
@@ -72,7 +73,9 @@ void matmul(
         case 11:
             matmul11(CALL);
             break;
-    
+        case 12:
+            matmul12(CALL);
+            break;
     }
 }
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
