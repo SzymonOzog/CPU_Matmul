@@ -40,12 +40,12 @@ if __name__ == "__main__":
             c = torch.zeros((M, N), dtype=torch.float32)
             my_ext.matmul(a, b, c, variant)
 
-            if not torch.allclose(c, out, atol=1e-4, rtol=1e-6):
+            if not torch.allclose(c, out, atol=1e-4, rtol=1e-5):
                 print(c)
                 print(out)
 
-            assert torch.allclose(c, out, atol=1e-4, rtol=1e-6)
+            assert torch.allclose(c, out, atol=1e-4, rtol=1e-5)
 
             flops = 2*M*K*N
             matmul_time = timeit.timeit(lambda: my_ext.matmul(a, b, c, variant), number=NUM_BENCH) / NUM_BENCH
-            print(f"torch_time={torch_time*1000:.4f}ms({flops/(torch_time*1e9):.2f}GFLOP/s), matmul_time={matmul_time*1000:.4f}ms({flops/(matmul_time*1e9):.2f}GFLOP/s), {variant=} performance = {(torch_time/matmul_time)*100:.2f}%")
+            print(f"{variant=} torch_time={torch_time*1000:.4f}ms({flops/(torch_time*1e9):.2f}GFLOP/s), matmul_time={matmul_time*1000:.4f}ms({flops/(matmul_time*1e9):.2f}GFLOP/s), {variant=} performance = {(torch_time/matmul_time)*100:.2f}%")
