@@ -4,7 +4,7 @@ import timeit
 import os
 import argparse
 
-VARIANTS = 10
+VARIANTS = 13
 NUM_BENCH = 15
 
 my_ext = load(name="my_ext",
