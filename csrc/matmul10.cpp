@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <arm_neon.h>
+#include <immintrin.h>
 
 namespace mm10 {
 void inner(float* a, float* b, float* c, 
@@ -55,47 +55,37 @@ namespace mm10 {
     {
         for(int m = 0; m<M; m+=4)
         {
-            for(int n = 0; n<N; n+=4)
+            for(int n = 0; n<N; n+=8)
             {
                 float* a_ptr = a + m*K;
-                float32x4_t c_reg[4] = {{0.f}};
+                __m256 c_reg[4] = {
+                    _mm256_setzero_ps(),
+                    _mm256_setzero_ps(),
+                    _mm256_setzero_ps(),
+                    _mm256_setzero_ps()
+                };
                 for(int k = 0; k<K; k++)
                 {
-                    float32x4_t vec_a = vld1q_f32(a_ptr); // Load 4 floats
-                    a_ptr += 4;
                     float* b_ptr = &b[k*SN + n];
 
-                    float32x4_t vec_b = vld1q_f32(b_ptr); // Load 4 floats
-                    b_ptr += 4;
-                    float* b_reg = reinterpret_cast<float*>(&vec_b);
+                    __m256 vec_b = _mm256_loadu_ps(b_ptr);
+                    b_ptr += 8;
 
-                    c_reg[0] = vmlaq_n_f32(c_reg[0], vec_b, vgetq_lane_f32(vec_a, 0));
-                    c_reg[1] = vmlaq_n_f32(c_reg[1], vec_b, vgetq_lane_f32(vec_a, 1));
-                    c_reg[2] = vmlaq_n_f32(c_reg[2], vec_b, vgetq_lane_f32(vec_a, 2));
-                    c_reg[3] = vmlaq_n_f32(c_reg[3], vec_b, vgetq_lane_f32(vec_a, 3));
+                    c_reg[0] = _mm256_fmadd_ps(vec_b, _mm256_set1_ps(a_ptr[0]), c_reg[0]);
+                    c_reg[1] = _mm256_fmadd_ps(vec_b, _mm256_set1_ps(a_ptr[1]), c_reg[1]);
+                    c_reg[2] = _mm256_fmadd_ps(vec_b, _mm256_set1_ps(a_ptr[2]), c_reg[2]);
+                    c_reg[3] = _mm256_fmadd_ps(vec_b, _mm256_set1_ps(a_ptr[3]), c_reg[3]);
+                    a_ptr += 4;
                 }
-                float32x4_t* c_vec = reinterpret_cast<float32x4_t*>(&c[(m+0)*SN + n+0]);
-                vst1q_f32(&c[(m+0)*SN + n+0], 
-                        vaddq_f32(*c_vec, c_reg[0])
-                        );
-
-                c_vec = reinterpret_cast<float32x4_t*>(&c[(m+1)*SN + n+0]);
-                vst1q_f32(&c[(m+1)*SN + n+0], 
-                        vaddq_f32(*c_vec, c_reg[1])
-                        );
-
-                c_vec = reinterpret_cast<float32x4_t*>(&c[(m+2)*SN + n+0]);
-                vst1q_f32(&c[(m+2)*SN + n+0], 
-                        vaddq_f32(*c_vec, c_reg[2])
-                        );
-
-
-                c_vec = reinterpret_cast<float32x4_t*>(&c[(m+3)*SN + n+0]);
-                vst1q_f32(&c[(m+3)*SN + n+0], 
-                        vaddq_f32(*c_vec, c_reg[3])
-                        );
+                _mm256_storeu_ps(&c[(m + 0) * SN + n],
+                        _mm256_add_ps(_mm256_loadu_ps(&c[(m + 0) * SN + n]), c_reg[0]));
+                _mm256_storeu_ps(&c[(m + 1) * SN + n],
+                        _mm256_add_ps(_mm256_loadu_ps(&c[(m + 1) * SN + n]), c_reg[1]));
+                _mm256_storeu_ps(&c[(m + 2) * SN + n],
+                        _mm256_add_ps(_mm256_loadu_ps(&c[(m + 2) * SN + n]), c_reg[2]));
+                _mm256_storeu_ps(&c[(m + 3) * SN + n],
+                        _mm256_add_ps(_mm256_loadu_ps(&c[(m + 3) * SN + n]), c_reg[3]));
             }
         }
     }
 }
-
